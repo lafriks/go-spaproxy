@@ -1,0 +1,79 @@
+---
+kind: pipeline
+name: compliance
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: install-npm-dependencies
+    pull: always
+    image: node:12
+    commands:
+      - cd examples/webapps/vue
+      - npm install
+    when:
+      branch:
+        - master
+      event:
+        - push
+        - pull_request
+
+  - name: revive-lint
+    pull: always
+    image: golang:1.13
+    commands:
+      - go get -u github.com/mgechev/revive
+      - revive ./...
+    when:
+      branch:
+        - master
+      event:
+        - push
+        - pull_request
+
+  - name: golangci-lint
+    pull: always
+    image: golang:1.13
+    commands:
+      - curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b /usr/bin v1.23.6;
+      - golangci-lint run --timeout 5m
+    when:
+      branch:
+        - master
+      event:
+        - push
+        - pull_request
+
+  - name: unit-test
+    pull: always
+    image: golang:1.13-alpine
+    commands:
+      - apk add npm git gcc musl-dev
+      - go test -cover -coverprofile coverage.out ./...
+    depends_on:
+      - install-npm-dependencies
+    when:
+      branch:
+        - master
+      event:
+        - push
+        - pull_request
+
+  - name: coverage
+    pull: always
+    image: robertstettner/drone-codecov
+    settings:
+      files:
+        - coverage.out
+    environment:
+      CODECOV_TOKEN:
+        from_secret: codecov_token
+    depends_on:
+      - unit-test
+    when:
+      branch:
+        - master
+      event:
+        - push
