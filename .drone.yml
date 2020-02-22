@@ -33,6 +33,19 @@ steps:
         - push
         - pull_request
 
+  - name: install-angular-dependencies
+    pull: always
+    image: node:12
+    commands:
+      - cd examples/webapps/angular
+      - npm install
+    when:
+      branch:
+        - master
+      event:
+        - push
+        - pull_request
+
   - name: revive-lint
     pull: always
     image: golang:1.13
