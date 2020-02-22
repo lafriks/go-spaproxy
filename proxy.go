@@ -24,6 +24,9 @@ type SpaDevProxy interface {
 	// Stop background process by killing it.
 	Stop() error
 
+	// DevServerURL returns development server URL.
+	DevServerURL() *url.URL
+
 	// HandleFunc handles reverse proxy function.
 	HandleFunc(w http.ResponseWriter, r *http.Request)
 }
@@ -71,6 +74,7 @@ type spaDevProxy struct {
 	options *SpaDevProxyOptions
 	cmd     *exec.Cmd
 	proxy   *httputil.ReverseProxy
+	url     *url.URL
 }
 
 // NewSpaDevProxy creates new SpaDevProxy instance.
@@ -83,6 +87,7 @@ func NewSpaDevProxy(options *SpaDevProxyOptions) (SpaDevProxy, error) {
 	return &spaDevProxy{
 		options: options,
 		proxy:   httputil.NewSingleHostReverseProxy(remote),
+		url:     remote,
 	}, nil
 }
 
@@ -186,4 +191,9 @@ func (p *spaDevProxy) Stop() error {
 // HandleFunc handles reverse proxy function.
 func (p *spaDevProxy) HandleFunc(w http.ResponseWriter, r *http.Request) {
 	p.proxy.ServeHTTP(w, r)
+}
+
+// DevServerURL returns development server URL.
+func (p *spaDevProxy) DevServerURL() *url.URL {
+	return p.url
 }
