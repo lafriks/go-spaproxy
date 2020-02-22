@@ -7,26 +7,21 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/go-chi/chi"
 	"github.com/lafriks/go-spaproxy"
 )
 
-// App instance
-type App struct {
-	proxy spaproxy.SpaDevProxy
-}
-
-func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.proxy.HandleFunc(w, r)
-}
-
 func main() {
-	// Create new React development server proxy service
-	proxy, err := spaproxy.NewReactDevProxy(&spaproxy.ReactDevProxyOptions{
-		Dir: "../webapps/reactjs/",
+	// Create new VueJS development server proxy service
+	proxy, err := spaproxy.NewVueDevProxy(&spaproxy.VueDevProxyOptions{
+		Dir: "../webapps/vue/",
 	})
 	if err != nil {
 		panic(err)
 	}
+
+	r := chi.NewRouter()
+	r.Get("/*", proxy.HandleFunc)
 
 	// Catch interrupts for gracefully stopping background node proecess
 	done := make(chan os.Signal, 1)
@@ -39,7 +34,7 @@ func main() {
 
 	// Start web server on port 8080
 	go func() {
-		if err = http.ListenAndServe(":8080", &App{proxy: proxy}); err != nil {
+		if err = http.ListenAndServe(":8080", r); err != nil {
 			panic(err)
 		}
 	}()
