@@ -7,11 +7,24 @@ platform:
   arch: amd64
 
 steps:
-  - name: install-npm-dependencies
+  - name: install-vuejs-dependencies
     pull: always
     image: node:12
     commands:
       - cd examples/webapps/vue
+      - npm install
+    when:
+      branch:
+        - master
+      event:
+        - push
+        - pull_request
+
+  - name: install-react-dependencies
+    pull: always
+    image: node:12
+    commands:
+      - cd examples/webapps/reactjs
       - npm install
     when:
       branch:
@@ -53,7 +66,8 @@ steps:
       - apk add npm git gcc musl-dev
       - go test -cover -coverprofile coverage.out ./...
     depends_on:
-      - install-npm-dependencies
+      - install-vuejs-dependencies
+      - install-react-dependencies
     when:
       branch:
         - master

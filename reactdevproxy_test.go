@@ -12,30 +12,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func catchStdout(t *testing.T, run func()) string {
-	realStdout := os.Stdout
-	defer func() { os.Stdout = realStdout }()
-
-	r, fakeStdout, err := os.Pipe()
-	assert.NoError(t, err)
-
-	os.Stdout = fakeStdout
-
-	run()
-
-	assert.NoError(t, fakeStdout.Close())
-
-	stdout, err := ioutil.ReadAll(r)
-	assert.NoError(t, err)
-	assert.NoError(t, r.Close())
-
-	return string(stdout)
-}
-
-func TestVueDevProxy_Valid(t *testing.T) {
+func TestReactDevProxy_Valid(t *testing.T) {
 	stdout := catchStdout(t, func() {
-		proxy, err := NewVueDevProxy(&VueDevProxyOptions{
-			Dir: "examples/webapps/vue/",
+		proxy, err := NewReactDevProxy(&ReactDevProxyOptions{
+			Dir: "examples/webapps/reactjs/",
 		})
 		assert.NoError(t, err)
 
@@ -57,17 +37,17 @@ func TestVueDevProxy_Valid(t *testing.T) {
 		res.Body.Close()
 		assert.NoError(t, err)
 
-		assert.Contains(t, string(content), "/js/app.js")
-		assert.Contains(t, string(content), "We're sorry but vue doesn't work properly without JavaScript enabled. Please enable it to continue.")
+		assert.Contains(t, string(content), "/static/js/main.chunk.js")
+		assert.Contains(t, string(content), "You need to enable JavaScript to run this app.")
 	})
-	assert.Contains(t, stdout, "Starting development server")
-	assert.Contains(t, stdout, "App running at")
+	assert.Contains(t, stdout, "Starting the development server")
+	assert.Contains(t, stdout, "You can now view reactjs in the browser")
 }
 
-func TestVueDevProxy_SpecificPort(t *testing.T) {
+func TestReactDevProxy_SpecificPort(t *testing.T) {
 	stdout := catchStdout(t, func() {
-		proxy, err := NewVueDevProxy(&VueDevProxyOptions{
-			Dir:  "examples/webapps/vue/",
+		proxy, err := NewReactDevProxy(&ReactDevProxyOptions{
+			Dir:  "examples/webapps/reactjs/",
 			Port: 12345,
 		})
 		assert.NoError(t, err)
@@ -84,8 +64,8 @@ func TestVueDevProxy_SpecificPort(t *testing.T) {
 	assert.Contains(t, stdout, "http://localhost:12345")
 }
 
-func TestVueDevProxy_InvalidDir(t *testing.T) {
-	proxy, err := NewVueDevProxy(&VueDevProxyOptions{
+func TestReactDevProxy_InvalidDir(t *testing.T) {
+	proxy, err := NewReactDevProxy(&ReactDevProxyOptions{
 		Dir: "does_not_exist",
 	})
 	assert.NoError(t, err)

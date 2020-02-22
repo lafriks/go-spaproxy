@@ -88,9 +88,12 @@ func NewSpaDevProxy(options *SpaDevProxyOptions) (SpaDevProxy, error) {
 
 // Start backgroud process and wait when it is ready to accept connections.
 func (p *spaDevProxy) Start(ctx context.Context) error {
+	if _, err := os.Stat(p.options.Dir); err != nil {
+		return err
+	}
 	path, args := prepareRunner(p.options.RunnerType, p.options.ScriptName, p.options.Args...)
 	p.cmd = newCommand(ctx, path, args...)
-	p.cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true}
+	p.cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 	p.cmd.Env = append(p.options.Env, fmt.Sprintf("PATH=%s", os.Getenv("PATH")))
 	p.cmd.Dir = p.options.Dir
 
