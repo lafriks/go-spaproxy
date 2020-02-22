@@ -2,8 +2,8 @@ github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/go-chi/chi v4.0.3+incompatible h1:gakN3pDJnzZN5jqFV2TEdF66rTfKeITyR8qu6ekICEY=
 github.com/go-chi/chi v4.0.3+incompatible/go.mod h1:eB3wogJHnLi3x/kFX2A+IbTBlXxmMeXJVKy9tTv1XzQ=
-github.com/lafriks/go-spaproxy v0.0.0-20200221182153-4aa40e54d156 h1:MmRdQKkwpNywfbPM1jhquME6N/sMl1MmSwlnWZGTODc=
-github.com/lafriks/go-spaproxy v0.0.0-20200221182153-4aa40e54d156/go.mod h1:BjrDzZBhrKTMVKYe8MFk/9cSFQIJYiPAhKzo9gh/HDk=
+github.com/lafriks/go-spaproxy v0.1.0 h1:lJwoKTyCpk2OuD6F3Dmi5wcHFTT3+u609EBVc8/i2OQ=
+github.com/lafriks/go-spaproxy v0.1.0/go.mod h1:BjrDzZBhrKTMVKYe8MFk/9cSFQIJYiPAhKzo9gh/HDk=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
