@@ -8,12 +8,11 @@ import (
 
 // VueDevProxyOptions represents VueJS development proxy options.
 type VueDevProxyOptions struct {
-	RunnerType    RunnerType
-	ShowBuildInfo bool
-	ScriptName    string
-	Dir           string
-	Port          int
-	Mode          string
+	RunnerType RunnerType
+	ScriptName string
+	Dir        string
+	Port       int
+	Mode       string
 }
 
 // NewVueDevProxy returns new SpaDevProxy instance for VueJS development.

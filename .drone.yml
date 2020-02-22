@@ -46,6 +46,19 @@ steps:
         - push
         - pull_request
 
+  - name: install-svelte-dependencies
+    pull: always
+    image: node:12
+    commands:
+      - cd examples/webapps/svelte
+      - npm install
+    when:
+      branch:
+        - master
+      event:
+        - push
+        - pull_request
+
   - name: revive-lint
     pull: always
     image: golang:1.13
@@ -81,6 +94,8 @@ steps:
     depends_on:
       - install-vuejs-dependencies
       - install-react-dependencies
+      - install-angular-dependencies
+      - install-svelte-dependencies
     when:
       branch:
         - master
