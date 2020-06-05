@@ -12,10 +12,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSvelteDevProxy_Valid(t *testing.T) {
+func testSvelteDevProxyValid(t *testing.T, runnerType RunnerType) {
 	stdout := catchStdout(t, func() {
 		proxy, err := NewSvelteDevProxy(&SvelteDevProxyOptions{
-			Dir: "examples/webapps/svelte/",
+			RunnerType: runnerType,
+			Dir:        "examples/webapps/svelte/",
 		})
 		assert.NoError(t, err)
 
@@ -39,6 +40,14 @@ func TestSvelteDevProxy_Valid(t *testing.T) {
 		assert.Contains(t, string(content), "Svelte app")
 	})
 	assert.Contains(t, stdout, "Your application is ready")
+}
+
+func TestSvelteDevProxy_Valid(t *testing.T) {
+	testSvelteDevProxyValid(t, RunnerTypeNpm)
+}
+
+func TestSvelteDevProxyYarn_Valid(t *testing.T) {
+	testSvelteDevProxyValid(t, RunnerTypeYarn)
 }
 
 func TestSvelteDevProxy_SpecificPort(t *testing.T) {

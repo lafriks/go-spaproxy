@@ -14,7 +14,8 @@ import (
 func main() {
 	// Create new Angular development server proxy service
 	proxy, err := spaproxy.NewAngularDevProxy(&spaproxy.AngularDevProxyOptions{
-		Dir: "../webapps/angular/",
+		RunnerType: spaproxy.RunnerTypeYarn,
+		Dir:        "../webapps/angular/",
 	})
 	if err != nil {
 		panic(err)

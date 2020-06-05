@@ -43,6 +43,6 @@ func NewReactDevProxy(options *ReactDevProxyOptions) (SpaDevProxy, error) {
 		Env:         env,
 		Args:        args,
 		Port:        port,
-		StartRegexp: regexp.MustCompile("You can now view reactjs in the browser"),
+		StartRegexp: regexp.MustCompile("(You can now view reactjs in the browser|Project is running at)"),
 	})
 }

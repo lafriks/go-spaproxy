@@ -12,10 +12,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestReactDevProxy_Valid(t *testing.T) {
+func testReactDevProxyValid(t *testing.T, runnerType RunnerType) {
 	stdout := catchStdout(t, func() {
 		proxy, err := NewReactDevProxy(&ReactDevProxyOptions{
-			Dir: "examples/webapps/reactjs/",
+			RunnerType: runnerType,
+			Dir:        "examples/webapps/reactjs/",
 		})
 		assert.NoError(t, err)
 
@@ -40,8 +41,12 @@ func TestReactDevProxy_Valid(t *testing.T) {
 		assert.Contains(t, string(content), "/static/js/main.chunk.js")
 		assert.Contains(t, string(content), "You need to enable JavaScript to run this app.")
 	})
-	assert.Contains(t, stdout, "Starting the development server")
-	assert.Contains(t, stdout, "You can now view reactjs in the browser")
+	assert.Contains(t, stdout, "Project is running at")
+	assert.Contains(t, stdout, "Starting the development server...")
+}
+
+func TestReactDevProxy_Valid(t *testing.T) {
+	testReactDevProxyValid(t, RunnerTypeNpm)
 }
 
 func TestReactDevProxy_SpecificPort(t *testing.T) {

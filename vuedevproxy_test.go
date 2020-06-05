@@ -32,10 +32,11 @@ func catchStdout(t *testing.T, run func()) string {
 	return string(stdout)
 }
 
-func TestVueDevProxy_Valid(t *testing.T) {
+func testVueDevProxyValid(t *testing.T, runnerType RunnerType) {
 	stdout := catchStdout(t, func() {
 		proxy, err := NewVueDevProxy(&VueDevProxyOptions{
-			Dir: "examples/webapps/vue/",
+			RunnerType: runnerType,
+			Dir:        "examples/webapps/vue/",
 		})
 		assert.NoError(t, err)
 
@@ -62,6 +63,14 @@ func TestVueDevProxy_Valid(t *testing.T) {
 	})
 	assert.Contains(t, stdout, "Starting development server")
 	assert.Contains(t, stdout, "App running at")
+}
+
+func TestVueDevProxy_Valid(t *testing.T) {
+	testVueDevProxyValid(t, RunnerTypeNpm)
+}
+
+func TestVueDevProxyYarn_Valid(t *testing.T) {
+	testVueDevProxyValid(t, RunnerTypeYarn)
 }
 
 func TestVueDevProxy_SpecificPort(t *testing.T) {
